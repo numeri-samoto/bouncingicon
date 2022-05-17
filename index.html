@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>testing</title>
+<script type="text/javascript">
+
+var img = new Image();
+img.src = 'icon.svg';
+
+var pos = [{ x: 0, y: 0 }];
+
+var size = 100;
+
+function reset(){
+  canvas = document.getElementById('canvas');
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+}
+
+function draw(){    
+  canvas = document.getElementById('canvas');
+  context = canvas.getContext('2d');
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.beginPath();
+  
+  pos.forEach(function(p) {
+      x = Math.abs(p.x - (canvas.width-size));
+      y = Math.abs(p.y - (canvas.height-size));
+      context.drawImage(img, x, y, size, size);
+  });
+}
+
+window.onload = function() {
+   window.onresize = reset;
+   reset();
+   window.onclick = function() {
+       pos.push({x: 0, y:0});
+   };
+   setInterval(function() {
+       pos = pos.map(function(p){
+           return {
+               x: (p.x + 5) % ((canvas.width-size) * 2),
+               y: (p.y + 5) % ((canvas.height-size) * 2)
+           };
+       });
+       draw();
+   }, 20);
+}
+</script>
+<style>
+body,html { margin:0; padding: 0;}
+canvas { background-color: gray; }
+</style>
+
+</head>
+<body>
+<canvas id="canvas"></canvas>
+</body>
+</html>
